@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Donate Now</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://kit.fontawesome.com/332a215f17.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+      <!-- Navbar-->
+      <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top" id="mainNav">
+          <div class="container">
+              <a class="navbar-brand js-scroll-trigger" href="#page-top">
+                <span class="logo"></span>
+              </a>
+              <button class="navbar-toggler navbar-toggler-right" 
+              type="button" data-toggle="collapse" data-target="#navbarResponsive" 
+              aria-controls="navbarResponsive" aria-expanded="false" 
+              aria-label="Toggle navigation">Menu
+              <i class="fas fa-bars ml-1"></i>
+            </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav text-uppercase ml-auto">
+                      <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="index.html">Home</a></li>
+                  <li class="nav-item">
+                 <a class="nav-link js-scroll-trigger" href="aboutus.html">About Us</a></li>
+                  <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="projects.html">Projects</a></li>
+                <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="mandate.html">Mandate</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="donate.html">Donate Now</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="blog.html">Blog</a></li>
+                 <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="contact.html">Contact Us</a></li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+      <!-- Hero-->
+      <header class="hero4">
+          <div class="container">
+          <div class="hero-heading">Feed Someone Today!</div>
+          </div>
+      </header>
+      <!--end of Hero Image-->
+  <!---Donation Section-->
+  <section class="mt-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="text-center mb-55">
+            <h3>Make a Donation Today!</h3>
+          </div>
+        </div>
+      </div>
+      <br> <br>
+      <!---->
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+  </section>
+  <!---End of Donation section Section-->
+  <div id="smart-button-container">
+    <div style="text-align: center;"><label for="description">DONOR'S NAME: </label> <br><input type="text" name="descriptionInput" id="description" maxlength="127" value=""></div>
+      <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter a description</p>
+    <div style="text-align: center"><label for="amount">AMOUNT ($ USD): </label> <br><input name="amountInput" type="number" id="amount" value="" ></div>
+      <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Please enter a price</p>
+    <div id="invoiceidDiv" style="text-align: center; display: none;"><label for="invoiceid"> </label><input name="invoiceid" maxlength="127" type="text" id="invoiceid" value="" ></div>
+      <p id="invoiceidError" style="visibility: hidden; color:red; text-align: center;">Please enter an Invoice ID</p>
+    <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
+  </div>
+  <script src="https://www.paypal.com/sdk/js?client-id=AXVJFDKc3GNo598CCHw3IsDsPXlN7yqTAKuYCmm4IVRyEj5gxkqaESWSMP_IAjPK5eCNkpfINzTEoP94&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+  <script>
+  function initPayPalButton() {
+    var description = document.querySelector('#smart-button-container #description');
+    var amount = document.querySelector('#smart-button-container #amount');
+    var descriptionError = document.querySelector('#smart-button-container #descriptionError');
+    var priceError = document.querySelector('#smart-button-container #priceLabelError');
+    var invoiceid = document.querySelector('#smart-button-container #invoiceid');
+    var invoiceidError = document.querySelector('#smart-button-container #invoiceidError');
+    var invoiceidDiv = document.querySelector('#smart-button-container #invoiceidDiv');
+
+    var elArr = [description, amount];
+
+    if (invoiceidDiv.firstChild.innerHTML.length > 1) {
+      invoiceidDiv.style.display = "block";
+    }
+
+    var purchase_units = [];
+    purchase_units[0] = {};
+    purchase_units[0].amount = {};
+
+    function validate(event) {
+      return event.value.length > 0;
+    }
+
+    paypal.Buttons({
+      style: {
+        color: 'gold',
+        shape: 'pill',
+        label: 'pay',
+        layout: 'vertical',
+        
+      },
+
+      onInit: function (data, actions) {
+        actions.disable();
+
+        if(invoiceidDiv.style.display === "block") {
+          elArr.push(invoiceid);
+        }
+
+        elArr.forEach(function (item) {
+          item.addEventListener('keyup', function (event) {
+            var result = elArr.every(validate);
+            if (result) {
+              actions.enable();
+            } else {
+              actions.disable();
+            }
+          });
+        });
+      },
+
+      onClick: function () {
+        if (description.value.length < 1) {
+          descriptionError.style.visibility = "visible";
+        } else {
+          descriptionError.style.visibility = "hidden";
+        }
+
+        if (amount.value.length < 1) {
+          priceError.style.visibility = "visible";
+        } else {
+          priceError.style.visibility = "hidden";
+        }
+
+        if (invoiceid.value.length < 1 && invoiceidDiv.style.display === "block") {
+          invoiceidError.style.visibility = "visible";
+        } else {
+          invoiceidError.style.visibility = "hidden";
+        }
+
+        purchase_units[0].description = description.value;
+        purchase_units[0].amount.value = amount.value;
+
+        if(invoiceid.value !== '') {
+          purchase_units[0].invoice_id = invoiceid.value;
+        }
+      },
+
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: purchase_units,
+        });
+      },
+
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (orderData) {
+
+          // Full available details
+          console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+          // Show a success message within this page, e.g.
+          const element = document.getElementById('paypal-button-container');
+          element.innerHTML = '';
+          element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+          // Or go to another URL:  actions.redirect('thank_you.html');
+          
+        });
+      },
+
+      onError: function (err) {
+        console.log(err);
+      }
+    }).render('#paypal-button-container');
+  }
+  initPayPalButton();
+  </script>
+  <br>      
+<!--Footer Section-->
+<!-- Signup-->
+<section class="signup-section mt-5" id="signup">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+         <h2 class="text-dark mb-5">Subscribe to receive updates!</h2>
+              <form class="form-inline d-flex">
+              <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0"
+               id="inputEmail" type="email" placeholder="Enter email address...">
+               <button class="btn btn-danger mx-auto" type="submit">
+                 Subscribe</button>
+                </form>
+          </div>
+      </div>
+  </div>
+</section>
+
+<br>
+<br>
+<section id="contact" class="contact mt-5">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">OUR PARTNERS</h2>
+      <h3 class="section-subheading text-muted">See our list of international partners toward the quest of ending world hunger.</h3>
+  </div> 
+<br>
+<img src="images/1-hotels-col.jpg"> <img src="images/HRC_Cordoba_Logo_4C_RGB_onBlk_crop.jpg"> <img src="images/The_Coca-Cola_Company_logo_web.png"> <img src="images/say_so_web.jpg"> <img src="images/rfg_web_1.jpg"> <img src="images/pg-logo.jpg"> <img src="images/partners.jpg"> <img src="images/mythical-logo.jpg"> <img src="images/Nucific_logo-01.jpg"> <img src="images/kneipp_web.jpg">
+ <!-- ======= Footer ======= -->
+ <footer class="mt-5" id="footer">
+    <div class="container d-md-flex py-4">
+    <div class="mr-md-auto text-center text-md-left">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Feed Someone Today</span></strong>. All Rights Reserved
+      </div>
+       </div>
+    <div class="social-links text-center text-md-right pt-3 pt-md-0">
+      <ul class="social">
+        <li class="list-item">
+          <a class="list-link" href="http://facebook.com/actionagainsthunger">
+            <i class="fab fa-facebook"></i>
+          </a>
+        </li>
+        <li class="list-item">
+          <a class="list-link" href="http://twitter.com/acfusa">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </li>
+        <li class="list-item">
+          <a class="list-link" href="http://www.instagram.com/actionagainsthunger">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </li>
+        <li class="list-item">
+          <a class="list-link" href="http://youtube.com/actionagainsthunger">
+            <i class="fab fa-youtube"></i>
+          </a>
+        </li>
+      </ul>
+     </div>
+  </div>
+</footer><!-- End Footer -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
